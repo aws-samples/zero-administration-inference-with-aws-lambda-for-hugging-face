@@ -1,0 +1,4 @@
+aws-cdk.core>=1.95.1
+aws-cdk.aws_ecr>=1.95.1
+aws-cdk.aws_lambda>=1.95.1
+aws-cdk.aws_apigateway>=1.95.1
