@@ -20,7 +20,7 @@ RUN apt-get update && \
 RUN mkdir -p ${FUNCTION_DIR}
 
 # Copy handler function
-COPY inference.py ${FUNCTION_DIR}
+COPY *.py ${FUNCTION_DIR}
 
 # Install the function's dependencies
 RUN pip uninstall --yes jupyter
