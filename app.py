@@ -43,7 +43,7 @@ class ServerlessHuggingFaceStack(cdk.Stack):
 
         # %%
         # iterates through the Python files in the docker directory
-        docker_folder = os.path.dirname(os.path.realpath(__file__)) + "/docker"
+        docker_folder = os.path.dirname(os.path.realpath(__file__)) + "/inference"
         pathlist = Path(docker_folder).rglob('*.py')
         for path in pathlist:
             base = os.path.basename(path)
