@@ -39,4 +39,5 @@ COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
 
 ENTRYPOINT [ "python3", "-m", "awslambdaric" ]
 
-CMD [ "inference.handler" ]
+# This will get replaced by the proper handler by the CDK script
+CMD [ "sentiment.handler" ]
