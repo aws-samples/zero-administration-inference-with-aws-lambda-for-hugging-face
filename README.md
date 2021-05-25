@@ -7,7 +7,6 @@ This project shows how to serve [:hugs:](https://huggingface.co/ ":hugs: Homepag
 * Stores custom container in Amazon Elastic Container Registry
 * Pre-trained models are downloaded automatically from :hugs: the first time a model is used
 * Pre-trained models are cached in Amazon Elastic File System to improve performance
-* Publishes a REST API endpoint on Amazon API Gateway for each model defined 
 * Builds with AWS Cloud Development Kit
 
 ## Architecture
@@ -44,8 +43,6 @@ And deploy.
 $ cdk deploy
 ```
 
-To the output of this command tells you the API URL.
-
 ## Code structure
 The code is organized the following way:
 ```bash
@@ -61,22 +58,8 @@ The ``ìnference``` directory contains:
 - The Dockerfile used to build a custom image to be able to run :hugs: inference using PyTorch using Lambdas
 - The Python scripts doing the actual inference
 
-The CDK script will generate for each Python scripts in the ```inference``` directory:
-- A Lambda function backed by the custom container and the Python inference script
-- An endpoint in the API Gateway
+The CDK script will generate for each Python scripts in the ```inference``` directory a Lambda function backed by the custom container and the Python inference script.
 
-The example directory will generate the following REST API Gateway:
-
-```bash
-─── HuggingFaceAPI
-    ├── sentiment
-    │   └── POST
-    └── summarization
-        └── POST
-```
-
-## Testing
-TODO
 
 ## Adding a translator (optional)
 
@@ -120,5 +103,4 @@ Disclaimer: Deploying the demo applications contained in this repository will po
 - [AWS Cloud Development Kit](https://aws.amazon.com/cdk/)
 - [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/)
 - [AWS Lambda](https://aws.amazon.com/lambda/)
-- [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
 - [Amazon Elastic File System](https://aws.amazon.com/efs/)

@@ -26,21 +26,6 @@ class ServerlessHuggingFaceStack(cdk.Stack):
                                            path="/export/models",
                                            posix_user=efs.PosixUser(gid="1001", uid="1001"))
 
-        # defines an API Gateway REST API resource backed by our functions.
-        target_api = api_gw.RestApi(self, 'HuggingFaceAPI',
-                                    rest_api_name='HuggingFace',
-                                    endpoint_types=[
-                                        api_gw.EndpointType.REGIONAL],
-                                    deploy_options=api_gw.StageOptions(
-                                        method_options={
-                                            # This special path applies to all resource paths and all HTTP methods
-                                            "/*/*": api_gw.MethodDeploymentOptions(
-                                                throttling_rate_limit=100,
-                                                throttling_burst_limit=200
-                                            )
-                                        })
-                                    )
-
         # %%
         # iterates through the Python files in the docker directory
         docker_folder = os.path.dirname(os.path.realpath(__file__)) + "/inference"
@@ -65,23 +50,12 @@ class ServerlessHuggingFaceStack(cdk.Stack):
             )
 
             # adds method for the function
-            entity = target_api.root.add_resource(filename)
             lambda_integration = api_gw.LambdaIntegration(function, proxy=False, integration_responses=[
                 api_gw.IntegrationResponse(status_code='200',
                                            response_parameters={
                                                'method.response.header.Access-Control-Allow-Origin': "'*'"
                                            })
             ])
-            entity.add_method('POST', lambda_integration,
-                              method_responses=[
-                                  api_gw.MethodResponse(status_code='200',
-                                                        response_parameters={
-                                                            'method.response.header.Access-Control-Allow-Origin': True
-                                                        })
-                              ])
-
-        cdk.CfnOutput(self, 'HTTP API Url', value=target_api.url)
-
 
 app = cdk.App()
 env = {'region': 'us-east-1'}
