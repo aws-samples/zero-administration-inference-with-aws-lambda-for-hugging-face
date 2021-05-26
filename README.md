@@ -1,6 +1,11 @@
-# Serverless :hugs: inference
+# Zero administration :hugs: inference
 
 ### Note: This is not production code and simply meant as a demo
+
+[:hugs: Transformers](https://huggingface.co/ ":hugs: Homepage") is a popular open-source project that provides pre-trained, state of the art Natural Language Processing (NLP) models for a wide variety of use cases. Customers with little to no machine learning experience can leverage pre-trained model to quickly enhance their applications using NLP. This includes tasks such as text classification, language translation, summarization, and question answering - to name a few.
+
+While there is no shortage of model hosting options in today’s ML landscape, they each have trade-offs. Many customers are seeking a zero administration ML inference solution that allows quick prototyping. Striving to meet this need, this blog post introduces a low touch, cost effective, and scalable mechanism for hosting Hugging Face models for realtime inference using AWS Lambda.
+
 
 This project shows how to serve [:hugs:](https://huggingface.co/ ":hugs: Homepage") inference.
 * Serverless inference using a AWS Lambda with a custom container

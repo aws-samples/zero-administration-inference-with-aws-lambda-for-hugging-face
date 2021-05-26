@@ -58,9 +58,8 @@ class ServerlessHuggingFaceStack(cdk.Stack):
             ])
 
 app = cdk.App()
-env = {'region': 'us-east-1'}
 
-ServerlessHuggingFaceStack(app, "ServerlessHuggingFaceStack", env=env)
+ServerlessHuggingFaceStack(app, "ServerlessHuggingFaceStack")
 
 app.synth()
 # %%
