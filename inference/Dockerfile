@@ -1,4 +1,4 @@
-ARG FUNCTION_DIR="/function"
+ARG FUNCTION_DIR="/function/"
 
 FROM huggingface/transformers-pytorch-cpu as build-image
 
