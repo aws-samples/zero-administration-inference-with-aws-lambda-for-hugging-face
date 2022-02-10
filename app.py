@@ -9,13 +9,13 @@ from aws_cdk import (
     aws_lambda as lambda_,
     aws_apigateway as api_gw,
     aws_efs as efs,
-    aws_ec2 as ec2,
-    core as cdk
+    aws_ec2 as ec2
 )
+from aws_cdk import App, Stack, Duration, RemovalPolicy
+from constructs import Construct
 
-
-class ServerlessHuggingFaceStack(cdk.Stack):
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+class ServerlessHuggingFaceStack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # EFS needs to be setup in a VPC
@@ -24,7 +24,7 @@ class ServerlessHuggingFaceStack(cdk.Stack):
         # creates a file system in EFS to store cache models
         fs = efs.FileSystem(self, 'FileSystem',
                             vpc=vpc,
-                            removal_policy=cdk.RemovalPolicy.DESTROY)
+                            removal_policy=RemovalPolicy.DESTROY)
         access_point = fs.add_access_point('MLAccessPoint',
                                            create_acl=efs.Acl(
                                                owner_gid='1001', owner_uid='1001', permissions='750'),
@@ -46,7 +46,7 @@ class ServerlessHuggingFaceStack(cdk.Stack):
                                                                   filename+".handler"]
                                                               ),
                 memory_size=8096,
-                timeout=cdk.Duration.seconds(600),
+                timeout=Duration.seconds(600),
                 vpc=vpc,
                 filesystem=lambda_.FileSystem.from_efs_access_point(
                     access_point, '/mnt/hf_models_cache'),
@@ -62,7 +62,7 @@ class ServerlessHuggingFaceStack(cdk.Stack):
                                            })
             ])
 
-app = cdk.App()
+app = App()
 
 ServerlessHuggingFaceStack(app, "ServerlessHuggingFaceStack")
 
