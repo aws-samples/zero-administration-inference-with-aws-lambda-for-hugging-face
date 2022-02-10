@@ -42,7 +42,7 @@ Face
 ## Prerequisites
 The following is required to run this example:
 -   [git](https://git-scm.com/)
--   [AWS CDK](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html)
+-   [AWS CDK v2](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html)
 -   [Python](https://www.python.org/) 3.6+
 -   [A virtual env](https://docs.python.org/3/library/venv.html#module-venv) (optional)
 
@@ -111,7 +111,7 @@ cached model:
 ```python
 fs = efs.FileSystem(self, 'FileSystem',
 vpc=vpc,
-removal_policy=cdk.RemovalPolicy.DESTROY)
+removal_policy=RemovalPolicy.DESTROY)
 access_point = fs.add_access_point('MLAccessPoint',
 create_acl=efs.Acl(
 owner_gid='1001', owner_uid='1001', permissions='750'),
@@ -134,7 +134,7 @@ function = lambda_.DockerImageFunction(
     code=lambda_.DockerImageCode.from_image_asset(docker_folder,
     cmd=[filename+".handler"]),
     memory_size=8096,
-    timeout=cdk.Duration.seconds(600),
+    timeout=Duration.seconds(600),
     vpc=vpc,
     filesystem=lambda_.FileSystem.from_efs_access_point(
     access_point, '/mnt/hf_models_cache'),
