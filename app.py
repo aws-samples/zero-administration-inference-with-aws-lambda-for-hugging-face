@@ -7,11 +7,11 @@ import os
 from pathlib import Path
 from aws_cdk import (
     aws_lambda as lambda_,
-    aws_apigateway as api_gw,
     aws_efs as efs,
     aws_ec2 as ec2
 )
-from aws_cdk import App, Stack, Duration, RemovalPolicy
+from aws_cdk import App, Stack, Duration, RemovalPolicy, Tags
+
 from constructs import Construct
 
 class ServerlessHuggingFaceStack(Stack):
@@ -39,7 +39,7 @@ class ServerlessHuggingFaceStack(Stack):
             base = os.path.basename(path)
             filename = os.path.splitext(base)[0]
             # Lambda Function from docker image
-            function = lambda_.DockerImageFunction(
+            lambda_.DockerImageFunction(
                 self, filename,
                 code=lambda_.DockerImageCode.from_image_asset(docker_folder,
                                                               cmd=[
@@ -48,23 +48,13 @@ class ServerlessHuggingFaceStack(Stack):
                 memory_size=8096,
                 timeout=Duration.seconds(600),
                 vpc=vpc,
-                filesystem=lambda_.FileSystem.from_efs_access_point(
-                    access_point, '/mnt/hf_models_cache'),
-                environment={
-                    "TRANSFORMERS_CACHE": "/mnt/hf_models_cache"},
+                filesystem=lambda_.FileSystem.from_efs_access_point(access_point, '/mnt/hf_models_cache'),
+                environment={"TRANSFORMERS_CACHE": "/mnt/hf_models_cache"},
             )
-
-            # adds method for the function
-            lambda_integration = api_gw.LambdaIntegration(function, proxy=False, integration_responses=[
-                api_gw.IntegrationResponse(status_code='200',
-                                           response_parameters={
-                                               'method.response.header.Access-Control-Allow-Origin': "'*'"
-                                           })
-            ])
 
 app = App()
 
-ServerlessHuggingFaceStack(app, "ServerlessHuggingFaceStack")
+stack = ServerlessHuggingFaceStack(app, "ServerlessHuggingFaceStack")
+Tags.of(stack).add("AwsSample", "ServerlessHuggingFace")
 
 app.synth()
-# %%
